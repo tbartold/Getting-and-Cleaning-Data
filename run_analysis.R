@@ -38,7 +38,7 @@ if(!file.exists("UCI HAR Dataset/features.txt")) {
 }
 
 # use this flag to discard temporary teables when they're no longer needed
-keep_it_clean<-TRUE
+keep_it_clean<-FALSE
 
 # load all the files we need into tables, we may or may not want to inspect them later in the environment
 
@@ -60,34 +60,6 @@ cat("loading test subjects\n")
 subject_test<-read.table("UCI HAR Dataset/test/subject_test.txt")
 X_test<-read.table("UCI HAR Dataset/test/X_test.txt")
 Y_test<-read.table("UCI HAR Dataset/test/Y_test.txt")
-
-# we may have reason to load the raw data files, but don't need them here
-
-#cat("loading train signals\n")
-#train_body_acc_x<-read.table("UCI HAR Dataset/train/Inertial Signals/body_acc_x_train.txt")
-#train_body_acc_y<-read.table("UCI HAR Dataset/train/Inertial Signals/body_acc_y_train.txt")
-#train_body_acc_z<-read.table("UCI HAR Dataset/train/Inertial Signals/body_acc_z_train.txt")
-
-#train_body_gyro_x<-read.table("UCI HAR Dataset/train/Inertial Signals/body_gyro_x_train.txt")
-#train_body_gyro_y<-read.table("UCI HAR Dataset/train/Inertial Signals/body_gyro_y_train.txt")
-#train_body_gyro_z<-read.table("UCI HAR Dataset/train/Inertial Signals/body_gyro_z_train.txt")
-
-#train_total_acc_x<-read.table("UCI HAR Dataset/train/Inertial Signals/total_acc_x_train.txt")
-#train_total_acc_y<-read.table("UCI HAR Dataset/train/Inertial Signals/total_acc_y_train.txt")
-#train_total_acc_z<-read.table("UCI HAR Dataset/train/Inertial Signals/total_acc_z_train.txt")
-
-#cat("loading test signals\n")
-#test_body_acc_x<-read.table("UCI HAR Dataset/test/Inertial Signals/body_acc_x_test.txt")
-#test_body_acc_y<-read.table("UCI HAR Dataset/test/Inertial Signals/body_acc_y_test.txt")
-#test_body_acc_z<-read.table("UCI HAR Dataset/test/Inertial Signals/body_acc_z_test.txt")
-
-#test_body_gyro_x<-read.table("UCI HAR Dataset/test/Inertial Signals/body_gyro_x_test.txt")
-#test_body_gyro_y<-read.table("UCI HAR Dataset/test/Inertial Signals/body_gyro_y_test.txt")
-#test_body_gyro_z<-read.table("UCI HAR Dataset/test/Inertial Signals/body_gyro_z_test.txt")
-
-#test_total_acc_x<-read.table("UCI HAR Dataset/test/Inertial Signals/total_acc_x_test.txt")
-#test_total_acc_y<-read.table("UCI HAR Dataset/test/Inertial Signals/total_acc_y_test.txt")
-#test_total_acc_z<-read.table("UCI HAR Dataset/test/Inertial Signals/total_acc_z_test.txt")
 
 # merge rows from training ans tests
 subject<-rbind(subject_test,subject_train)
@@ -125,7 +97,7 @@ if (keep_it_clean) {
 }
 
 # remove columns we don't want
-X<-X[ ,grepl("(mean|std)",names(X))]
+X<-X[ ,grepl("(?!meanFreq)(mean|std)",names(X),perl=TRUE)]
 
 # merge the various tables for analysis
 df <- cbind(subject,Y,X)
